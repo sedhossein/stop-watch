@@ -1,0 +1,77 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+ENTITY countertestbench IS
+END countertestbench;
+
+ARCHITECTURE behavior OF countertestbench IS 
+    COMPONENT main
+    PORT(
+         start : IN  std_logic;
+         stop : IN  std_logic;
+         reset : IN  std_logic;
+         clock : IN  std_logic;
+         output : OUT  std_logic_vector(6 downto 0)
+        );
+    END COMPONENT;
+
+   --Inputs
+   signal start : std_logic := '1';
+   signal stop : std_logic := '0';
+   signal reset : std_logic := '0';
+   signal clock : std_logic := '1';
+
+   --Outputs
+   signal output : std_logic_vector(6 downto 0);
+
+	constant clock_period : time := 1000 ms;
+BEGIN
+  -- Instantiate the Unit Under Test (UUT)
+   uut: main PORT MAP (
+          start => start,
+          stop => stop,
+          reset => reset,
+          clock => clock,
+          output => output
+        );
+
+	clock_process :process
+		begin
+			clock <= '0';
+			wait for clock_period/2;
+			clock <= '1';
+			wait for clock_period/2;
+		end process;
+
+
+   -- Stimulus START process
+   stim_proc_start: process
+   begin     
+		start<='1';
+      wait for 600000 ms;
+		start<='0';
+      wait for 2000 ms;
+		start<='1';
+   end process;
+	
+	-- Stimulus STOP process
+   --stim_proc_stop: process
+   --begin     
+		--stop<='0';
+      --wait for 6000 ms;
+		--stop<='1';
+      --wait for 1000 ms;
+		--stop<='0';
+   --end process;
+
+
+   -- Stimulus RESET process
+	--stim_proc_reset: process
+   --begin     
+		--reset<='0';
+      --wait for 7000 ms;
+		--reset<='1';
+      --wait for 1000 ms;
+		--reset<='0';
+   --end process;
+END;
